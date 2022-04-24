@@ -1,0 +1,4626 @@
+backend:
+  name: git-gateway
+  accept_roles:
+    - admin
+    - editor
+media_folder: theme/assets/images
+public_folder: /assets/images
+collections:
+  - name: pages
+    label: Pages
+    identifier_field: title
+    extension: md
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    folder: cms/pages
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '{{slug}}.html'
+      - &ref_0
+        label: Seo
+        name: seo
+        widget: object
+        collapsed: true
+        fields:
+          - label: Title
+            name: title
+            widget: string
+            required: false
+          - label: Description
+            name: description
+            widget: string
+            required: false
+          - label: No index
+            name: noindex
+            widget: boolean
+            default: false
+            required: false
+          - label: Open Graph Title
+            name: og:title
+            widget: string
+            required: false
+          - label: Open Graph Image
+            name: og:image
+            widget: image
+            required: false
+            media_library:
+              config:
+                multiple: false
+          - label: Twitter Title
+            name: twitter:title
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Card
+            name: twitter:card
+            widget: string
+            default: summary
+            required: false
+          - label: Twitter Site
+            name: twitter:site
+            widget: string
+            required: false
+          - label: Twitter Creator
+            name: twitter:creator
+            widget: string
+            required: false
+          - label: Additional HTML tags
+            name: additional_tags
+            widget: text
+            required: false
+  - name: careers_category
+    label: Careers Categories
+    folder: cms/careers-category
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Careers Category Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: f_category-description
+        label: Careers Category Description
+        widget: text
+        required: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: careers-category
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[careers-category].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - name: career
+    label: Careers
+    folder: cms/career
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Job Title
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: Job Post Complete Description
+        name: body
+        widget: markdown
+        required: false
+      - hint: ''
+        name: f_career-description
+        label: Job Short Description
+        widget: text
+        required: true
+      - hint: ''
+        name: f_work-address
+        label: Job Post Location
+        widget: string
+        required: true
+      - hint: ''
+        name: f_work-time
+        label: Job Post Type
+        widget: select
+        required: true
+        options:
+          - label: Part Time
+            value: Part Time
+          - label: Full Time
+            value: Full Time
+          - label: Freelancer
+            value: Freelancer
+      - hint: ''
+        name: f_careers-category
+        label: Job Post Category
+        widget: relation
+        required: true
+        collection: careers_category
+        value_field: cms/careers-category/{{slug}}.md
+        search_fields:
+          - slug
+          - name
+        display_fields:
+          - title
+        multiple: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: career
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[career].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - name: product
+    label: Packages
+    folder: cms/product
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: variation-properties
+        label: Variation Properties
+        widget: list
+        required: false
+        summary: '{{name}}'
+        fields:
+          - hint: ''
+            name: slug
+            label: Slug
+            widget: hidden
+            required: true
+          - hint: ''
+            name: name
+            label: Name
+            widget: string
+            required: true
+          - hint: ''
+            name: values
+            label: Values
+            widget: list
+            required: true
+            summary: '{{name}}'
+            fields:
+              - hint: ''
+                name: slug
+                label: Slug
+                widget: hidden
+                required: true
+              - hint: ''
+                name: name
+                label: Name
+                widget: string
+                required: true
+      - hint: ''
+        name: variations
+        label: Variations
+        widget: list
+        required: true
+        summary: '{{title}}'
+        min: 1
+        fields:
+          - hint: Slug of the variation
+            name: slug
+            label: Slug
+            widget: string
+            required: true
+          - hint: Default variation?
+            name: default
+            label: Default
+            widget: boolean
+            required: true
+          - hint: ''
+            name: variation-properties
+            label: SKU Values
+            widget: prop-values
+            required: false
+          - hint: ''
+            name: title
+            label: Name
+            widget: string
+            required: true
+          - hint: ''
+            name: f_main-image
+            label: Main Image
+            widget: object
+            required: false
+            fields:
+              - hint: ''
+                name: url
+                label: Image
+                widget: image
+                required: false
+                allow_multiple: false
+              - hint: Image Alt
+                name: alt
+                label: alt
+                widget: string
+                required: false
+          - hint: ''
+            name: f_more-images
+            label: More Images
+            widget: list
+            required: false
+            fields:
+              - hint: ''
+                name: url
+                label: Image
+                widget: image
+                required: false
+                allow_multiple: false
+              - hint: Image Alt
+                name: alt
+                label: alt
+                widget: string
+                required: false
+          - hint: ''
+            name: f_price
+            label: Price
+            widget: price
+            required: true
+          - hint: Compare at Price must be higher than price
+            name: f_compare-at-price
+            label: Compare at price
+            widget: price
+            required: false
+          - hint: ''
+            name: f_download-files
+            label: Downloads
+            widget: list
+            required: false
+            fields:
+              - hint: ''
+                name: url
+                label: Image
+                widget: image
+                required: false
+                allow_multiple: false
+              - hint: Image Alt
+                name: alt
+                label: alt
+                widget: string
+                required: false
+          - hint: ''
+            name: f_width
+            label: Width
+            widget: number
+            required: false
+          - hint: ''
+            name: f_length
+            label: Length
+            widget: number
+            required: false
+          - hint: ''
+            name: f_height
+            label: Height
+            widget: number
+            required: false
+          - hint: ''
+            name: f_weight
+            label: Weight
+            widget: number
+            required: false
+          - hint: ''
+            name: f_sku
+            label: SKU
+            widget: string
+            required: false
+      - hint: ''
+        name: title
+        label: Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: About Package
+        name: body
+        widget: markdown
+        required: false
+      - hint: Add this product to one or more categories.
+        name: f_category
+        label: Categories
+        widget: relation
+        required: false
+        collection: category
+        value_field: cms/category/{{slug}}.md
+        search_fields:
+          - slug
+          - name
+        display_fields:
+          - title
+        multiple: true
+      - hint: ''
+        name: f_description
+        label: Description
+        widget: string
+        required: false
+      - hint: ''
+        name: f_shippable
+        label: Requires Shipping
+        widget: boolean
+        required: false
+      - hint: ''
+        name: f_ec-product-type
+        label: Product type
+        widget: select
+        required: false
+        options:
+          - label: Physical
+            value: Physical
+          - label: Digital
+            value: Digital
+          - label: Service
+            value: Service
+          - label: Advanced
+            value: Advanced
+      - hint: ''
+        name: f_package-icon
+        label: Package Icon
+        widget: object
+        required: true
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: true
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_package-feature-1
+        label: Package Feature 1
+        widget: string
+        required: false
+      - hint: ''
+        name: f_package-feature-2
+        label: Package Feature 2
+        widget: string
+        required: false
+      - hint: ''
+        name: f_package-feature-3
+        label: Package Feature 3
+        widget: string
+        required: false
+      - hint: ''
+        name: f_package-feature-4
+        label: Package Feature 4
+        widget: string
+        required: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: product
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[product].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - name: category
+    label: Package Categories
+    folder: cms/category
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: f_about-category
+        label: About Category
+        widget: text
+        required: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: category
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[category].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - name: blog_author
+    label: Blog Authors
+    folder: cms/blog-author
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Author Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: f_author-bio-summary
+        label: Author Bio
+        widget: text
+        required: true
+      - hint: ''
+        name: f_picture
+        label: Author Profile Picture
+        widget: object
+        required: true
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: true
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_author-cover-image
+        label: Author Cover Image
+        widget: object
+        required: true
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: true
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_author-facebook-link
+        label: Author Facebook Link
+        widget: string
+        required: false
+      - hint: ''
+        name: f_author-twitter-link
+        label: Author Twitter Link
+        widget: string
+        required: false
+      - hint: ''
+        name: f_author-linkedin-link
+        label: Author LinkedIn Link
+        widget: string
+        required: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: blog-author
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[blog-author].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - name: blog_category
+    label: Blog Categories
+    folder: cms/blog-category
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Blog Category Name
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: f_article-category-description
+        label: Blog Category Description
+        widget: text
+        required: false
+      - hint: ''
+        name: f_article-category-color
+        label: Blog Category Color
+        widget: color
+        required: false
+        enableAlpha: true
+        allowInput: true
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: blog-category
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[blog-category].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - name: blog
+    label: Blog Posts
+    folder: cms/blog
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Blog Post Title
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: Blog Post Content
+        name: body
+        widget: markdown
+        required: false
+      - hint: A summary of the blog post that appears on the blog post widget
+        name: f_article-summary
+        label: Blog Post Excerpt
+        widget: text
+        required: true
+      - hint: ''
+        name: f_article-main-image
+        label: Blog Post Featured Image
+        widget: object
+        required: true
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: true
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_article-author
+        label: Blog Post Author
+        widget: relation
+        required: true
+        collection: blog_author
+        value_field: cms/blog-author/{{slug}}.md
+        search_fields:
+          - slug
+          - name
+        display_fields:
+          - title
+        multiple: false
+      - hint: ''
+        name: f_article-category
+        label: Blog Post Category
+        widget: relation
+        required: true
+        collection: blog_category
+        value_field: cms/blog-category/{{slug}}.md
+        search_fields:
+          - slug
+          - name
+        display_fields:
+          - title
+        multiple: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: blog
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[blog].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - name: case_study
+    label: Case Studies
+    folder: cms/case-study
+    create: true
+    identifier_field: name
+    extension: md
+    slug: '{{slug}}'
+    fields:
+      - hint: ''
+        name: title
+        label: Case Study Title
+        widget: string
+        required: true
+      - hint: ''
+        name: created-on
+        label: Created On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: updated-on
+        label: Updated On
+        widget: datetime
+        required: false
+      - hint: ''
+        name: published-on
+        label: Published On
+        widget: datetime
+        required: false
+      - label: Section 1 - Description
+        name: body
+        widget: markdown
+        required: false
+      - hint: ''
+        name: f_case-study-company
+        label: Case Study Client
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-main-image
+        label: Case Study Featured Image
+        widget: object
+        required: true
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: true
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_case-study-date
+        label: Case Study Date
+        widget: datetime
+        required: false
+      - hint: ''
+        name: f_case-study-summary
+        label: Case Study Summary
+        widget: text
+        required: true
+      - hint: ''
+        name: f_case-study-services-title
+        label: Detail 1 - Title
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-services
+        label: Detail 1 - Description
+        widget: text
+        required: true
+      - hint: ''
+        name: f_case-study-platforms-title
+        label: Detail 2 - Title
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-platforms
+        label: Detail 2 - Description
+        widget: text
+        required: true
+      - hint: ''
+        name: f_case-study-result-1-title
+        label: Result Number 1 - Title
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-quantity-result-1
+        label: Result Number 1 - Number
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-result-1-incresed
+        label: Result Number 1 - Description
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-result-2-title
+        label: Result Number 2 - Title
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-quantity-result-2
+        label: Result Number 2 - Number
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-result-2-incresed
+        label: Result Number 2 - Description
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-project-title
+        label: Section 1 - Title
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-execution-title
+        label: Section 2 - Title
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-execution
+        label: Section 2 - Description
+        widget: markdown
+        required: true
+      - hint: ''
+        name: f_case-study-results-title
+        label: Section 3 - Title
+        widget: string
+        required: true
+      - hint: ''
+        name: f_case-study-results
+        label: Section 3 - Description
+        widget: markdown
+        required: true
+      - hint: ''
+        name: f_case-study-results-image-1
+        label: Section 3 - Image 1
+        widget: object
+        required: true
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: true
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - hint: ''
+        name: f_case-study-results-image-2
+        label: Section 3 - Image 2
+        widget: object
+        required: true
+        fields:
+          - hint: ''
+            name: url
+            label: Image
+            widget: image
+            required: true
+            allow_multiple: false
+          - hint: Image Alt
+            name: alt
+            label: alt
+            widget: string
+            required: false
+      - label: Tags
+        widget: hidden
+        name: tags
+        default: case-study
+      - label: Layout
+        widget: hidden
+        name: layout
+        default: '[case-study].html'
+      - label: Publish Date
+        name: date
+        widget: datetime
+      - *ref_0
+  - label: Theme Settings
+    name: settings
+    identifier_field: title
+    extension: json
+    create: false
+    delete: false
+    slug: '{{slug}}'
+    editor:
+      preview: false
+    files:
+      - label: General
+        name: site
+        file: cms/_data/settings/site.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: General
+          - hint: Full domain url (needed for a correct sitemap file)
+            name: domain
+            label: Domain
+            widget: string
+            required: false
+          - name: favicon
+            label: Favicon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: apple_touch_icon
+            label: Apple Touch Icon
+            widget: image
+            allow_multiple: false
+            required: false
+          - name: header_additional_content
+            label: Additional Content Header
+            hint: Content here will be placed before </head> tag
+            widget: text
+            required: false
+          - name: footer_additional_content
+            label: Additional Content Footer
+            hint: Content here will be placed before </body> tag
+            widget: text
+            required: false
+          - name: images_optimization
+            label: Images Optimization
+            widget: object
+            collapsed: false
+            fields:
+              - label: Image Formats
+                name: formats
+                widget: select
+                multiple: true
+                options:
+                  - label: Avif
+                    value: avif
+                  - label: Webp
+                    value: webp
+              - label: Image Dimensions
+                name: dimensions
+                widget: select
+                multiple: true
+                options:
+                  - label: '500'
+                    value: 500
+                  - label: '800'
+                    value: 800
+                  - label: '1080'
+                    value: 1080
+                  - label: '1600'
+                    value: 1600
+                  - label: '2000'
+                    value: 2000
+                  - label: '2600'
+                    value: 2600
+      - label: Colors
+        name: colors
+        file: cms/_data/colors.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Colors
+      - label: Texts
+        name: texts
+        file: cms/_data/texts.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Texts
+          - hint: 'Original text: Home, key: 2268ff'
+            label: Text
+            name: 2268ff
+            widget: string
+          - hint: 'Original text: Services, key: 560f747e'
+            label: Text
+            name: 560f747e
+            widget: string
+          - hint: 'Original text: Google Placement, key: -2bdbba42'
+            label: Text
+            name: '-2bdbba42'
+            widget: string
+          - hint: 'Original text: Contact us, key: 7f274abe'
+            label: Text
+            name: 7f274abe
+            widget: string
+          - hint: 'Original text: Your Cart, key: -77ee8913'
+            label: Text
+            name: '-77ee8913'
+            widget: string
+          - hint: 'Original text: Subtotal, key: -76f396dc'
+            label: Text
+            name: '-76f396dc'
+            widget: string
+          - hint: 'Original text: Continue to Checkout, key: -7941186e'
+            label: Text
+            name: '-7941186e'
+            widget: string
+          - hint: 'Original text: No items found., key: 3d503d2b'
+            label: Text
+            name: 3d503d2b
+            widget: string
+          - hint: 'Original text: Go To Packages, key: -7a6c4a26'
+            label: Text
+            name: '-7a6c4a26'
+            widget: string
+          - hint: >-
+              Original text: Product is not available in this quantity., key:
+              -1c765d0d
+            label: Text
+            name: '-1c765d0d'
+            widget: string
+          - hint: 'Original text: Digital Marketing, It''s Optimal, key: 73174acb'
+            label: Text
+            name: 73174acb
+            widget: string
+          - hint: 'Original text: Always deliver more than expected., key: -74134d0a'
+            label: Text
+            name: '-74134d0a'
+            widget: string
+          - hint: 'Original text: ~ Larry Page, key: -450f1653'
+            label: Text
+            name: '-450f1653'
+            widget: string
+          - hint: 'Original text: Contact Us, key: 7f2746de'
+            label: Text
+            name: 7f2746de
+            widget: string
+          - hint: 'Original text: Our Services, key: 13a96ef2'
+            label: Text
+            name: 13a96ef2
+            widget: string
+          - hint: >-
+              Original text: High-impact services to take your business to the
+              next level, key: -470d772f
+            label: Text
+            name: '-470d772f'
+            widget: string
+          - hint: >-
+              Original text: We offer an assortment of services each with
+              different levels of personalization to suit your business needs.
+              Below are our most used services., key: -57b44acf
+            label: Text
+            name: '-57b44acf'
+            widget: text
+          - hint: "Original text: GMB\_Optimization, key: -5436906f"
+            label: Text
+            name: '-5436906f'
+            widget: string
+          - hint: >-
+              Original text: A marketing consultant once said the website is the
+              mothership of all small businesses. GMB is the biggest directory
+              listing on the web. It contains your name, phone number, address,
+              hours, services and so much more. Optimizing this listing is how
+              your business stands out to Google., key: -7c95cb4b
+            label: Text
+            name: '-7c95cb4b'
+            widget: text
+          - hint: 'Original text: SEO Audit, key: -60ace1e8'
+            label: Text
+            name: '-60ace1e8'
+            widget: string
+          - hint: 'Original text: Photo Uploads, key: -7ae9fd9c'
+            label: Text
+            name: '-7ae9fd9c'
+            widget: string
+          - hint: 'Original text: Removing Negative Reviews, key: -3fd186f1'
+            label: Text
+            name: '-3fd186f1'
+            widget: string
+          - hint: >-
+              Original text: Guaranteed top-page Google Placement. While you and
+              your team and maintiang and creating a customer base, we're making
+              sure you're at the top of Google., key: -5a8db0ad
+            label: Text
+            name: '-5a8db0ad'
+            widget: text
+          - hint: 'Original text: Ads A/B Testing, key: 12308034'
+            label: Text
+            name: '12308034'
+            widget: string
+          - hint: 'Original text: Full Compliance, key: -621565b4'
+            label: Text
+            name: '-621565b4'
+            widget: string
+          - hint: 'Original text: Retargeting, key: -1e61ac42'
+            label: Text
+            name: '-1e61ac42'
+            widget: string
+          - hint: 'Original text: Review Management, key: 39746e0b'
+            label: Text
+            name: 39746e0b
+            widget: string
+          - hint: >-
+              Original text: A client has found you online, as well as your
+              competition. How do you stand out? Our software allows you to
+              request reviews from your book of business. We will even respond
+              to reviews for you!, key: 5ad3e7c7
+            label: Text
+            name: 5ad3e7c7
+            widget: text
+          - hint: 'Original text: Bulk Contact, key: -580234ee'
+            label: Text
+            name: '-580234ee'
+            widget: string
+          - hint: 'Original text: Review Negative Reviews, key: -a3b5128'
+            label: Text
+            name: '-a3b5128'
+            widget: string
+          - hint: 'Original text: Schedule Today!, key: -cc10557'
+            label: Text
+            name: '-cc10557'
+            widget: string
+          - hint: >-
+              Original text: Reach out to one of our Google Experts, Marketing
+              Specialists, or Customer Service today!, key: -213bc6a7
+            label: Text
+            name: '-213bc6a7'
+            widget: string
+          - hint: 'Original text: Schedule Consultation, key: -11171e8e'
+            label: Text
+            name: '-11171e8e'
+            widget: string
+          - hint: >-
+              Original text: Reach out to one of our qualified marketing
+              consultants today, or schedule a call for later., key: -70f45d82
+            label: Text
+            name: '-70f45d82'
+            widget: text
+          - hint: 'Original text: Schedule Now, key: 4ef881cd'
+            label: Text
+            name: 4ef881cd
+            widget: string
+          - hint: 'Original text: (314) 390-1184, key: -3df587c'
+            label: Text
+            name: '-3df587c'
+            widget: string
+          - hint: 'Original text: Sales@OptimalPros.com, key: -221aa4d9'
+            label: Text
+            name: '-221aa4d9'
+            widget: string
+          - hint: >-
+              Original text: Copyright © 2022 Optimal Pros. All rights
+              reserved., key: -77e8aa5c
+            label: Text
+            name: '-77e8aa5c'
+            widget: string
+          - hint: 'Original text: Protected Page, key: -11d4bbff'
+            label: Text
+            name: '-11d4bbff'
+            widget: string
+          - hint: >-
+              Original text: For your saftey this page has been restricted to
+              adminstation only. If you previously had access to this page,
+              don't panic, it's most likely under construciton., key: -43c79469
+            label: Text
+            name: '-43c79469'
+            widget: text
+          - hint: >-
+              Original text: Incorrect password. Please try again., key:
+              -f5c4b5f
+            label: Text
+            name: '-f5c4b5f'
+            widget: string
+          - hint: 'Original text: Digital Marketing, It''s Optimal., key: -102df13d'
+            label: Text
+            name: '-102df13d'
+            widget: string
+          - hint: 'Original text: Thank you! You are now subscribed!, key: 2a1890a8'
+            label: Text
+            name: 2a1890a8
+            widget: string
+          - hint: 'Original text: Oops! Something went wrong., key: 5e8b37c5'
+            label: Text
+            name: 5e8b37c5
+            widget: string
+          - hint: 'Original text: Support@OptimalPros., key: 35ee8e37'
+            label: Text
+            name: 35ee8e37
+            widget: string
+          - hint: 'Original text: com, key: 18181'
+            label: Text
+            name: '18181'
+            widget: string
+          - hint: 'Original text: Copyright 2022 Optimal Pros, key: 7198c32d'
+            label: Text
+            name: 7198c32d
+            widget: string
+          - hint: 'Original text: 404, key: c938'
+            label: Text
+            name: c938
+            widget: string
+          - hint: 'Original text: Oops.. Page not found, key: 263c7081'
+            label: Text
+            name: 263c7081
+            widget: string
+          - hint: >-
+              Original text: The page you're looking for can't be found.
+              Double-check the URL and try again. Or click the button below.,
+              key: 2dcbe408
+            label: Text
+            name: 2dcbe408
+            widget: text
+          - hint: 'Original text: Go Home, key: 6b29b517'
+            label: Text
+            name: 6b29b517
+            widget: string
+          - hint: 'Original text: View Services, key: 72dc7379'
+            label: Text
+            name: 72dc7379
+            widget: string
+          - hint: 'Original text: About The Team, key: -7a76dfc1'
+            label: Text
+            name: '-7a76dfc1'
+            widget: string
+          - hint: 'Original text: Learn About Us, key: 442c26cd'
+            label: Text
+            name: 442c26cd
+            widget: string
+          - hint: 'Original text: The numbers speak for themselves., key: -44350742'
+            label: Text
+            name: '-44350742'
+            widget: string
+          - hint: 'Original text: 325, key: c5b6'
+            label: Text
+            name: c5b6
+            widget: string
+          - hint: 'Original text: +, key: 2b'
+            label: Text
+            name: 2b
+            widget: string
+          - hint: 'Original text: Clients Worldwide, key: 5ca2d10d'
+            label: Text
+            name: 5ca2d10d
+            widget: string
+          - hint: 'Original text: 975, key: dcd7'
+            label: Text
+            name: dcd7
+            widget: string
+          - hint: 'Original text: Projects Completed, key: -3e42c1db'
+            label: Text
+            name: '-3e42c1db'
+            widget: string
+          - hint: 'Original text: 50, key: 69b'
+            label: Text
+            name: 69b
+            widget: string
+          - hint: 'Original text: Team Members, key: -729719aa'
+            label: Text
+            name: '-729719aa'
+            widget: string
+          - hint: 'Original text: 85m, key: d910'
+            label: Text
+            name: d910
+            widget: string
+          - hint: 'Original text: Revenue, key: -5b392404'
+            label: Text
+            name: '-5b392404'
+            widget: string
+          - hint: 'Original text: Generated, key: -77734691'
+            label: Text
+            name: '-77734691'
+            widget: string
+          - hint: 'Original text: Our Values, key: -62b76f4a'
+            label: Text
+            name: '-62b76f4a'
+            widget: string
+          - hint: 'Original text: The core values behind, key: 3e259766'
+            label: Text
+            name: '3e259766'
+            widget: string
+          - hint: 'Original text: our work, key: -3a1489b'
+            label: Text
+            name: '-3a1489b'
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Faucibus ante velit nunc morbi pretium. Ut nullam dolor,
+              pulvinar proin viverra ullamcorper ac, eget., key: -34047ffe
+            label: Text
+            name: '-34047ffe'
+            widget: text
+          - hint: 'Original text: Integrity, key: -6b2de0d3'
+            label: Text
+            name: '-6b2de0d3'
+            widget: string
+          - hint: >-
+              Original text: It's on our walls, in our contracts, and spoken
+              around the office daily. If we say we're going to do something, we
+              do it. It's as simple as that., key: 39b120d
+            label: Text
+            name: 39b120d
+            widget: text
+          - hint: 'Original text: Accountability, key: 444a9a7d'
+            label: Text
+            name: 444a9a7d
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Tristique velit nulla at congue massa enim habitasse
+              commodo. Sed mi dictum non ultrices sed dis., key: -7423fe1e
+            label: Text
+            name: '-7423fe1e'
+            widget: text
+          - hint: 'Original text: Growth, key: 7fa2cde7'
+            label: Text
+            name: 7fa2cde7
+            widget: string
+          - hint: >-
+              Original text: There is always something to learn. From our
+              clients, friends, colleagues, and more. We know , key: 1225cfb4
+            label: Text
+            name: 1225cfb4
+            widget: text
+          - hint: 'Original text: Team Work, key: 6973faf4'
+            label: Text
+            name: 6973faf4
+            widget: string
+          - hint: 'Original text: Blog, key: 1fa3c2'
+            label: Text
+            name: 1fa3c2
+            widget: string
+          - hint: 'Original text: Tips, Tricks, and Strategies, key: 2977493a'
+            label: Text
+            name: 2977493a
+            widget: string
+          - hint: >-
+              Original text: Let's be honest, you can do what we are doing by
+              yourself. We exist to take 1% of your schedule and make it 100% of
+              ours. We're a team of full time marketing managers, developers,
+              and designers., key: -177c49bd
+            label: Text
+            name: '-177c49bd'
+            widget: text
+          - hint: 'Original text: Subscribe to our newsletter, key: 35c884dc'
+            label: Text
+            name: 35c884dc
+            widget: string
+          - hint: >-
+              Original text: Receive product updates, the latest blog posts, and
+              other helpful and relevant content. We promise not to blow up your
+              inbox, we hate that too., key: 6fded4d9
+            label: Text
+            name: 6fded4d9
+            widget: text
+          - hint: 'Original text: Latest Articles, key: 35cec6b6'
+            label: Text
+            name: 35cec6b6
+            widget: string
+          - hint: 'Original text: all, key: 179a1'
+            label: Text
+            name: 179a1
+            widget: string
+          - hint: 'Original text: Previous, key: -4811e0e9'
+            label: Text
+            name: '-4811e0e9'
+            widget: string
+          - hint: 'Original text: Next, key: 24ff13'
+            label: Text
+            name: 24ff13
+            widget: string
+          - hint: 'Original text: Case Studies, key: -667f9cc9'
+            label: Text
+            name: '-667f9cc9'
+            widget: string
+          - hint: >-
+              Original text: Our work results speak by themselves, key:
+              -34177784
+            label: Text
+            name: '-34177784'
+            widget: string
+          - hint: 'Original text: Changelog, key: -31d02e8c'
+            label: Text
+            name: '-31d02e8c'
+            widget: string
+          - hint: 'Original text: V.1, key: 14899'
+            label: Text
+            name: '14899'
+            widget: string
+          - hint: >-
+              Original text: Initial Growth Webflow Template Release., key:
+              716d832
+            label: Text
+            name: 716d832
+            widget: string
+          - hint: 'Original text: V.1.1, key: 4d18c1c'
+            label: Text
+            name: 4d18c1c
+            widget: string
+          - hint: >-
+              Original text: Fixed arrow rotation on mobile menu dropdown., key:
+              6fc80bb8
+            label: Text
+            name: 6fc80bb8
+            widget: string
+          - hint: 'Original text: V.1.2, key: 4d18c1d'
+            label: Text
+            name: 4d18c1d
+            widget: string
+          - hint: >-
+              Original text: Fixed SVG's and border radius issues on Safari.,
+              key: 7843ec14
+            label: Text
+            name: 7843ec14
+            widget: string
+          - hint: 'Original text: V.1.3, key: 4d18c1e'
+            label: Text
+            name: 4d18c1e
+            widget: string
+          - hint: 'Original text: Updated audits settings, key: 4c9fd1c6'
+            label: Text
+            name: 4c9fd1c6
+            widget: string
+          - hint: 'Original text: V.1.4, key: 4d18c1f'
+            label: Text
+            name: 4d18c1f
+            widget: string
+          - hint: >-
+              Original text: Added packages cards without eCommerce, key:
+              7213c298
+            label: Text
+            name: 7213c298
+            widget: string
+          - hint: 'Original text: Let’s work together, key: -1d3473c2'
+            label: Text
+            name: '-1d3473c2'
+            widget: string
+          - hint: >-
+              Original text: Reach out to us for a no pressure consultation.
+              We're all tired of getting sales calls. Let's talk about what your
+              business needs and if we're the right fit for you., key: -368c797c
+            label: Text
+            name: '-368c797c'
+            widget: text
+          - hint: 'Original text: Contact Information, key: 352a84ec'
+            label: Text
+            name: 352a84ec
+            widget: string
+          - hint: 'Original text: support@optimalpros.com, key: -6640bff6'
+            label: Text
+            name: '-6640bff6'
+            widget: string
+          - hint: 'Original text: Name, key: 24eeab'
+            label: Text
+            name: 24eeab
+            widget: string
+          - hint: 'Original text: Email Address, key: -2b7010d0'
+            label: Text
+            name: '-2b7010d0'
+            widget: string
+          - hint: 'Original text: Company, key: -64202ba3'
+            label: Text
+            name: '-64202ba3'
+            widget: string
+          - hint: 'Original text: Phone Number, key: -55f81185'
+            label: Text
+            name: '-55f81185'
+            widget: string
+          - hint: 'Original text: Services you are interested on:, key: -7d73464d'
+            label: Text
+            name: '-7d73464d'
+            widget: string
+          - hint: 'Original text: GMB Optimization, key: 6a462f11'
+            label: Text
+            name: 6a462f11
+            widget: string
+          - hint: 'Original text: Advanced Analytics, key: -77203ef8'
+            label: Text
+            name: '-77203ef8'
+            widget: string
+          - hint: 'Original text: Content Marketing, key: -77e50101'
+            label: Text
+            name: '-77e50101'
+            widget: string
+          - hint: 'Original text: Social Media Marketing, key: 617cae17'
+            label: Text
+            name: 617cae17
+            widget: string
+          - hint: 'Original text: Message, key: -63dc6819'
+            label: Text
+            name: '-63dc6819'
+            widget: string
+          - hint: >-
+              Original text: Thank you! Your message has been received!, key:
+              -7f5eee50
+            label: Text
+            name: '-7f5eee50'
+            widget: string
+          - hint: >-
+              Original text: Oops! Something went wrong while submitting the
+              message., key: -b319196
+            label: Text
+            name: '-b319196'
+            widget: string
+          - hint: 'Original text: , key: e802'
+            label: Text
+            name: e802
+            widget: string
+          - hint: "Original text: \_\_Back to Blog, key: -384373d2"
+            label: Text
+            name: '-384373d2'
+            widget: string
+          - hint: 'Original text: View All, key: 4b0951a6'
+            label: Text
+            name: 4b0951a6
+            widget: string
+          - hint: "Original text:  \_Back to Blog, key: -27284352"
+            label: Text
+            name: '-27284352'
+            widget: string
+          - hint: "Original text: Articles by\_, key: -cc1351a"
+            label: Text
+            name: '-cc1351a'
+            widget: string
+          - hint: "Original text: \_articles, key: 618632dd"
+            label: Text
+            name: 618632dd
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consecteturor
+              adipiscing elit. Tincidunt donec vulputate ipsum erat urna
+              auctor., key: -84e7272
+            label: Text
+            name: '-84e7272'
+            widget: text
+          - hint: "Original text: \_\_all careers, key: 4983936"
+            label: Text
+            name: '4983936'
+            widget: string
+          - hint: 'Original text: Apply Now, key: -45e051c'
+            label: Text
+            name: '-45e051c'
+            widget: string
+          - hint: 'Original text: About this position, key: 340820f8'
+            label: Text
+            name: 340820f8
+            widget: string
+          - hint: 'Original text: Stay tuned about our new positions, key: 5d686a28'
+            label: Text
+            name: 5d686a28
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consecteturor
+              adipiscing elit. Tincidunt donec vulputate ipsum erat urna auctor.
+              Eget phasellus ideirs., key: -7170e4f6
+            label: Text
+            name: '-7170e4f6'
+            widget: text
+          - hint: 'Original text: Related Positions, key: -1444d8b'
+            label: Text
+            name: '-1444d8b'
+            widget: string
+          - hint: 'Original text: , key: e800'
+            label: Text
+            name: e800
+            widget: string
+          - hint: "Original text: \_\_All Careers, key: -34c5870a"
+            label: Text
+            name: '-34c5870a'
+            widget: string
+          - hint: "Original text: \_careers, key: dc0f415"
+            label: Text
+            name: dc0f415
+            widget: string
+          - hint: 'Original text: Open Positions, key: 767fee14'
+            label: Text
+            name: 767fee14
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Faucibus ante velit nunc morbi pretium. Ut nullam dolor.,
+              key: -49afc62b
+            label: Text
+            name: '-49afc62b'
+            widget: text
+          - hint: 'Original text: Can''t find the perfect position?, key: -3d627410'
+            label: Text
+            name: '-3d627410'
+            widget: string
+          - hint: 'Original text: Read More, key: 318af39f'
+            label: Text
+            name: 318af39f
+            widget: string
+          - hint: 'Original text: Testimonials, key: 1590c3d4'
+            label: Text
+            name: 1590c3d4
+            widget: string
+          - hint: >-
+              Original text: Don't take our word for it, take theirs!, key:
+              1c2245e
+            label: Text
+            name: 1c2245e
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Faucibus ante velit nunc morbi pretium. Ut nullam dolor,
+              pulvinar., key: -47e38424
+            label: Text
+            name: '-47e38424'
+            widget: text
+          - hint: >-
+              Original text: “Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Orci tempor bibendum aliquam lacus, elementum. Diam viverra
+              sit fermentum imperdiet ornare. Pharetra interdum sit donec quam.
+              Est nibh porta lobortis est amet. Ultrices adipiscing elementum
+              odio ac sed lorem sit justo. Eros tristique adipiscing gravida
+              sit.”, key: 60979651
+            label: Text
+            name: '60979651'
+            widget: text
+          - hint: 'Original text: John Carter, key: -16d5537e'
+            label: Text
+            name: '-16d5537e'
+            widget: string
+          - hint: 'Original text: VP of Marketing at Webflow, key: -6e233aee'
+            label: Text
+            name: '-6e233aee'
+            widget: string
+          - hint: 'Original text: Jason Larson, key: 7170f1da'
+            label: Text
+            name: 7170f1da
+            widget: string
+          - hint: 'Original text: Marketing Lead at Google, key: f50749c'
+            label: Text
+            name: f50749c
+            widget: string
+          - hint: 'Original text: Sophie Moore, key: -211238b0'
+            label: Text
+            name: '-211238b0'
+            widget: string
+          - hint: 'Original text: Head of Marketing at Facebook, key: 2e378db0'
+            label: Text
+            name: 2e378db0
+            widget: string
+          - hint: "Original text: \_\_All Packages, key: -36c23334"
+            label: Text
+            name: '-36c23334'
+            widget: string
+          - hint: "Original text: \_packages, key: -28794a73"
+            label: Text
+            name: '-28794a73'
+            widget: string
+          - hint: 'Original text: What''s included?, key: 10df61f3'
+            label: Text
+            name: 10df61f3
+            widget: string
+          - hint: 'Original text: Buy now, key: 71bb9a1c'
+            label: Text
+            name: 71bb9a1c
+            widget: string
+          - hint: 'Original text: This product is out of stock., key: 7aaa2dac'
+            label: Text
+            name: 7aaa2dac
+            widget: string
+          - hint: >-
+              Original text: Need help with a custom marketing campaign?, key:
+              4500ba4a
+            label: Text
+            name: 4500ba4a
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Eleifend dictum mi senectus dolor sit egestas odio lorem. A
+              non quis senectus ullamcorper egestas praesent quis ut. Integer
+              odio augue., key: -38552cdf
+            label: Text
+            name: '-38552cdf'
+            widget: text
+          - hint: 'Original text: Order your package today!, key: -5eeef24b'
+            label: Text
+            name: '-5eeef24b'
+            widget: string
+          - hint: >-
+              Original text: Ready to grow your company? Order your plan today,
+              and we will contact you within 24hrs to get started., key:
+              -22d3ca49
+            label: Text
+            name: '-22d3ca49'
+            widget: text
+          - hint: 'Original text: Quantity:, key: 31164cef'
+            label: Text
+            name: 31164cef
+            widget: string
+          - hint: 'Original text: About the Package, key: 72c64b44'
+            label: Text
+            name: 72c64b44
+            widget: string
+          - hint: 'Original text: to the top, key: -597c937f'
+            label: Text
+            name: '-597c937f'
+            widget: string
+          - hint: >-
+              Original text: Have you ever seen your name at the top of Google?,
+              key: 671f3500
+            label: Text
+            name: 671f3500
+            widget: string
+          - hint: >-
+              Original text: To get a preview of your fully customized Google Ad
+              fill out this form! The moment you complete this form you'll be
+              shown a live demo of what you ad will look like at the top of
+              Google!, key: 2f05a983
+            label: Text
+            name: 2f05a983
+            widget: text
+          - hint: 'Original text: What''s The Process?, key: 32bbc5cf'
+            label: Text
+            name: 32bbc5cf
+            widget: string
+          - hint: 'Original text: Step 1, key: -6bcb8c03'
+            label: Text
+            name: '-6bcb8c03'
+            widget: string
+          - hint: 'Original text: Content Plan, key: 37d7f2b0'
+            label: Text
+            name: 37d7f2b0
+            widget: string
+          - hint: >-
+              Original text: Let's talk about what you want specifically. Do you
+              want your ad in a different language, a niche market, or maybe a
+              custom url?, key: -747b6185
+            label: Text
+            name: '-747b6185'
+            widget: text
+          - hint: 'Original text: Step 2, key: -6bcb8c02'
+            label: Text
+            name: '-6bcb8c02'
+            widget: string
+          - hint: 'Original text: Publishing & Execution, key: 69b1c771'
+            label: Text
+            name: 69b1c771
+            widget: string
+          - hint: >-
+              Original text: Your ad will go live in as little as 7 days!
+              Waiting for results doesn't take long., key: -b69b7a5
+            label: Text
+            name: '-b69b7a5'
+            widget: string
+          - hint: 'Original text: Step 3, key: -6bcb8c01'
+            label: Text
+            name: '-6bcb8c01'
+            widget: string
+          - hint: 'Original text: Measure & Scale, key: 5dd9b3ce'
+            label: Text
+            name: 5dd9b3ce
+            widget: string
+          - hint: >-
+              Original text: Not the results you were looking for? Let's tweak
+              your campaign! New markets, vocabulary change, whatever it may be.
+              Each campaign is custom to the individual., key: 59eed53f
+            label: Text
+            name: 59eed53f
+            widget: text
+          - hint: 'Original text: Our Process, key: -147762a5'
+            label: Text
+            name: '-147762a5'
+            widget: string
+          - hint: >-
+              Original text: Let's Bring Your Billboard Above Water., key:
+              57db8ec1
+            label: Text
+            name: 57db8ec1
+            widget: string
+          - hint: >-
+              Original text: You have a website, why not show it off? You have a
+              phone number, why not let it ring!, key: -60b8cc15
+            label: Text
+            name: '-60b8cc15'
+            widget: string
+          - hint: 'Original text: Request a Quote, key: -624ce2d4'
+            label: Text
+            name: '-624ce2d4'
+            widget: string
+          - hint: >-
+              Original text: We are ready to help you. Get in touch today, key:
+              6bcc84b
+            label: Text
+            name: 6bcc84b
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Faucibus ante velit nunc morbi pretium ut nullam dolor.,
+              key: 6b2ca829
+            label: Text
+            name: 6b2ca829
+            widget: text
+          - hint: >-
+              Original text: Oops! Something went wrong while submitting the
+              form., key: -7c112e99
+            label: Text
+            name: '-7c112e99'
+            widget: string
+          - hint: 'Original text: Licenses, key: 37fa6872'
+            label: Text
+            name: 37fa6872
+            widget: string
+          - hint: >-
+              Original text: Icons and other Graphics were manually designed by
+              the , key: 15c42159
+            label: Text
+            name: 15c42159
+            widget: string
+          - hint: 'Original text:  BRIX Templates, key: -4c680628'
+            label: Text
+            name: '-4c680628'
+            widget: string
+          - hint: >-
+              Original text:  team. You may download these and edit them to fit
+              your website without asking for permission or providing credit. ,
+              key: -49dfc190
+            label: Text
+            name: '-49dfc190'
+            widget: text
+          - hint: >-
+              Original text: Upon purchasing Growth template, our team grants
+              you a nonexclusive, worldwide copyright license to download, copy,
+              modify, and use the icons., key: -1b6716e0
+            label: Text
+            name: '-1b6716e0'
+            widget: text
+          - hint: 'Original text: Photography, key: -38f29e83'
+            label: Text
+            name: '-38f29e83'
+            widget: string
+          - hint: >-
+              Original text: All images used in the Growth Webflow Template are
+              licensed for free personal and commercial use. If you'd like to
+              use any specific image, you can check the licenses and download
+              the images for free on , key: -1c34f8cc
+            label: Text
+            name: '-1c34f8cc'
+            widget: text
+          - hint: 'Original text: Unsplash, key: 34b8660'
+            label: Text
+            name: 34b8660
+            widget: string
+          - hint: 'Original text: , , key: 574'
+            label: Text
+            name: '574'
+            widget: string
+          - hint: 'Original text: Pexels, key: -71b4f337'
+            label: Text
+            name: '-71b4f337'
+            widget: string
+          - hint: 'Original text: , and , key: 4d05ec9d'
+            label: Text
+            name: 4d05ec9d
+            widget: string
+          - hint: 'Original text: Freepik, key: 3f3b8b86'
+            label: Text
+            name: 3f3b8b86
+            widget: string
+          - hint: 'Original text: ., key: 2e'
+            label: Text
+            name: 2e
+            widget: string
+          - hint: 'Original text: Image 1, key: -2ad1a574'
+            label: Text
+            name: '-2ad1a574'
+            widget: string
+          - hint: 'Original text: Image 2, key: -2ad1a573'
+            label: Text
+            name: '-2ad1a573'
+            widget: string
+          - hint: 'Original text: Image 3, key: -2ad1a572'
+            label: Text
+            name: '-2ad1a572'
+            widget: string
+          - hint: 'Original text: Image 4, key: -2ad1a571'
+            label: Text
+            name: '-2ad1a571'
+            widget: string
+          - hint: 'Original text: Image 5, key: -2ad1a570'
+            label: Text
+            name: '-2ad1a570'
+            widget: string
+          - hint: 'Original text: Image 6, key: -2ad1a56f'
+            label: Text
+            name: '-2ad1a56f'
+            widget: string
+          - hint: 'Original text: Image 7, key: -2ad1a56e'
+            label: Text
+            name: '-2ad1a56e'
+            widget: string
+          - hint: 'Original text: Image 8, key: -2ad1a56d'
+            label: Text
+            name: '-2ad1a56d'
+            widget: string
+          - hint: 'Original text: Image 9, key: -2ad1a56c'
+            label: Text
+            name: '-2ad1a56c'
+            widget: string
+          - hint: 'Original text: Image 10, key: -2f6308dc'
+            label: Text
+            name: '-2f6308dc'
+            widget: string
+          - hint: 'Original text: Image 11, key: -2f6308db'
+            label: Text
+            name: '-2f6308db'
+            widget: string
+          - hint: 'Original text: Image 12, key: -2f6308da'
+            label: Text
+            name: '-2f6308da'
+            widget: string
+          - hint: 'Original text: ,, key: 2c'
+            label: Text
+            name: 2c
+            widget: string
+          - hint: 'Original text:  Image 13, key: 592ad747'
+            label: Text
+            name: 592ad747
+            widget: string
+          - hint: |-
+              Original text: .
+                        , key: 15f0c69c
+            label: Text
+            name: 15f0c69c
+            widget: string
+          - hint: 'Original text: Freepick, key: -57ca1b53'
+            label: Text
+            name: '-57ca1b53'
+            widget: string
+          - hint: 'Original text: Packages, key: 309bb90d'
+            label: Text
+            name: 309bb90d
+            widget: string
+          - hint: >-
+              Original text: Tailor-made packages to help your business grow,
+              key: -613e4c5e
+            label: Text
+            name: '-613e4c5e'
+            widget: string
+          - hint: 'Original text: Standard, key: 521782dd'
+            label: Text
+            name: 521782dd
+            widget: string
+          - hint: 'Original text: $2,500.00 USD, key: 52ab163d'
+            label: Text
+            name: 52ab163d
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet consecteturor adipiscing
+              elit tincidunt donec vulputate ipsum erat urna auctor eget
+              phasellu., key: 4e25e669
+            label: Text
+            name: 4e25e669
+            widget: text
+          - hint: 'Original text: SEO: Search Engine Optimization, key: -15b616a'
+            label: Text
+            name: '-15b616a'
+            widget: string
+          - hint: 'Original text: Paid Advertising, key: 37acffd0'
+            label: Text
+            name: 37acffd0
+            widget: string
+          - hint: 'Original text: Normal Support, key: 1c626596'
+            label: Text
+            name: 1c626596
+            widget: string
+          - hint: 'Original text: Learn More, key: -52bd880f'
+            label: Text
+            name: '-52bd880f'
+            widget: string
+          - hint: 'Original text: Premium, key: 503d6637'
+            label: Text
+            name: 503d6637
+            widget: string
+          - hint: 'Original text: $5,000.00 USD, key: -5baf2f41'
+            label: Text
+            name: '-5baf2f41'
+            widget: string
+          - hint: 'Original text: All in Standard Plan, key: -5719a450'
+            label: Text
+            name: '-5719a450'
+            widget: string
+          - hint: 'Original text: Premium Support, key: -2d040d3a'
+            label: Text
+            name: '-2d040d3a'
+            widget: string
+          - hint: 'Original text: Deluxe, key: 79cbae57'
+            label: Text
+            name: 79cbae57
+            widget: string
+          - hint: 'Original text: $10,500.00 USD, key: 231f7a68'
+            label: Text
+            name: 231f7a68
+            widget: string
+          - hint: 'Original text: All in Premium Plan, key: -2baa89f2'
+            label: Text
+            name: '-2baa89f2'
+            widget: string
+          - hint: 'Original text: Conversion Optimization, key: -85043c9'
+            label: Text
+            name: '-85043c9'
+            widget: string
+          - hint: 'Original text: Custom Growth Marketing Plan, key: -33643ed3'
+            label: Text
+            name: '-33643ed3'
+            widget: string
+          - hint: 'Original text: Instant Response Support, key: 2d5a576f'
+            label: Text
+            name: 2d5a576f
+            widget: string
+          - hint: >-
+              Original text: No program is cookie-cutter. Feel free to reach out
+              and see what we can custom make for you!, key: -70b3447d
+            label: Text
+            name: '-70b3447d'
+            widget: text
+          - hint: 'Original text: Review Managment, key: -37f0766a'
+            label: Text
+            name: '-37f0766a'
+            widget: string
+          - hint: >-
+              Original text: Guaranteed top-page Google Placement. While you and
+              your team are maintaining and creating a customer base, we're
+              making sure you're at the top of Google., key: -5e39cd35
+            label: Text
+            name: '-5e39cd35'
+            widget: text
+          - hint: 'Original text: GMB Managment, key: -41dcc2c6'
+            label: Text
+            name: '-41dcc2c6'
+            widget: string
+          - hint: >-
+              Original text: Is your business card 7 years outdated? Treat your
+              Google My Business (GMB) page to a makeover. We can answer
+              reviews, post photos, update holiday hours, and more., key:
+              22526985
+            label: Text
+            name: '22526985'
+            widget: text
+          - hint: 'Original text: Monthly Reports, key: 2fce706c'
+            label: Text
+            name: 2fce706c
+            widget: string
+          - hint: >-
+              Original text: With monthly reports we can attach analytics to
+              posts, links, emails, and more. See where the holes in your
+              business model are., key: -63d567e8
+            label: Text
+            name: '-63d567e8'
+            widget: text
+          - hint: 'Original text: Goals & Targets Setup, key: 1e0aeea5'
+            label: Text
+            name: 1e0aeea5
+            widget: string
+          - hint: 'Original text: User Analytics, key: 16249571'
+            label: Text
+            name: '16249571'
+            widget: string
+          - hint: 'Original text: Personalized Reports, key: -bec7e91'
+            label: Text
+            name: '-bec7e91'
+            widget: string
+          - hint: >-
+              Original text: Let's fill in the gaps in your campaign. Your
+              target market could be on any number of social networks., key:
+              -6cd565d0
+            label: Text
+            name: '-6cd565d0'
+            widget: text
+          - hint: 'Original text: Cover Your Fan Bases, key: 11626851'
+            label: Text
+            name: '11626851'
+            widget: string
+          - hint: 'Original text: Display Advertising, key: 458df886'
+            label: Text
+            name: 458df886
+            widget: string
+          - hint: 'Original text: Goes Beyond Google, key: 4e5ed280'
+            label: Text
+            name: 4e5ed280
+            widget: string
+          - hint: 'Original text: Content Creation, key: -3278451a'
+            label: Text
+            name: '-3278451a'
+            widget: string
+          - hint: >-
+              Original text: Facebook posts, GMB posts, and more! We can provide
+              photos, rich text content, and more. The sky is truly the limit.,
+              key: 3f63b4bb
+            label: Text
+            name: 3f63b4bb
+            widget: text
+          - hint: 'Original text: Community Management, key: -72f52ae6'
+            label: Text
+            name: '-72f52ae6'
+            widget: string
+          - hint: 'Original text: Start Here, key: 1581b92e'
+            label: Text
+            name: 1581b92e
+            widget: string
+          - hint: "Original text: If you just purchased \_Growth Webflow Template and are looking for the basics on how to get started editing it, start here., key: 3b2ac65b"
+            label: Text
+            name: 3b2ac65b
+            widget: text
+          - hint: 'Original text: Getting Started, key: 3766ef65'
+            label: Text
+            name: 3766ef65
+            widget: string
+          - hint: >-
+              Original text: Thanks for purchasing the Growth template. In this
+              brief guide we cover all the basics on how to edit basic elements
+              (i.e. colors, fonts, CMS content, etc) from the Growth Webflow
+              template., key: 3721e3fd
+            label: Text
+            name: 3721e3fd
+            widget: text
+          - hint: >-
+              Original text: If you are not very familiar with Webflow, we
+              highly recommend you to take the Webflow 101 Crash Course from ,
+              key: -63d27ff9
+            label: Text
+            name: '-63d27ff9'
+            widget: text
+          - hint: 'Original text: Webflow University, key: 2e81932c'
+            label: Text
+            name: 2e81932c
+            widget: string
+          - hint: >-
+              Original text: , as it will teach you all the basics to get up and
+              running., key: 37eb7d1c
+            label: Text
+            name: 37eb7d1c
+            widget: string
+          - hint: 'Original text: Styling, key: -c8cd5f2'
+            label: Text
+            name: '-c8cd5f2'
+            widget: string
+          - hint: >-
+              Original text: Let's get started with the styling of the
+              template., key: -6b2cb70b
+            label: Text
+            name: '-6b2cb70b'
+            widget: string
+          - hint: 'Original text: Colors, key: 78a3a990'
+            label: Text
+            name: 78a3a990
+            widget: string
+          - hint: >-
+              Original text: Growth template is built using Color Swatches,
+              meaning that you can easily edit a color swatch to be updated
+              site-wide., key: -39fdb000
+            label: Text
+            name: '-39fdb000'
+            widget: text
+          - hint: >-
+              Original text: In order to do this, you just need to go to the
+              Style tab in the right sidebar, then scroll to Colors in
+              Typography section, and if you click the color, you will be able
+              to see all color swatches and edit them to be updated site-wide to
+              any color needed., key: f697916
+            label: Text
+            name: f697916
+            widget: text
+          - hint: 'Original text: - Growth Webflow Template, key: -4e9ff942'
+            label: Text
+            name: '-4e9ff942'
+            widget: string
+          - hint: 'Original text: ‍, key: 200d'
+            label: Text
+            name: 200d
+            widget: string
+          - hint: 'Original text: Fonts, key: 40e8de4'
+            label: Text
+            name: 40e8de4
+            widget: string
+          - hint: >-
+              Original text: Growth template uses one single font side-wide, and
+              it's set up in the , key: 6bdba140
+            label: Text
+            name: 6bdba140
+            widget: string
+          - hint: 'Original text: Body (All Pages), key: -206a72b2'
+            label: Text
+            name: '-206a72b2'
+            widget: string
+          - hint: >-
+              Original text:  selector, so this means you can easily update the
+              font on all the site in one click., key: -4d3a16c7
+            label: Text
+            name: '-4d3a16c7'
+            widget: string
+          - hint: >-
+              Original text: On any page, just click the orange selector option
+              in the top right of the Style tab, and then select , key: 5a94528c
+            label: Text
+            name: 5a94528c
+            widget: text
+          - hint: 'Original text: . Once with this, you can go to , key: -c363ba3'
+            label: Text
+            name: '-c363ba3'
+            widget: string
+          - hint: 'Original text: Typography, key: 5500514f'
+            label: Text
+            name: 5500514f
+            widget: string
+          - hint: >-
+              Original text:  section below and change the font to any font for
+              your business brand., key: -41a535b2
+            label: Text
+            name: '-41a535b2'
+            widget: string
+          - hint: "Original text: In case you need a custom or premium font that is not available on Webflow, you can always go to Project Settings >\_Fonts and you will be able to upload custom fonts, or connect your Adobe Fonts account., key: -3e79e18c"
+            label: Text
+            name: '-3e79e18c'
+            widget: text
+          - hint: "Original text: Graphics &\_Icons, key: -4dcf9e75"
+            label: Text
+            name: '-4dcf9e75'
+            widget: string
+          - hint: >-
+              Original text: Some icons or graphics in the template are normal
+              images/graphics, so you will notice that when updating all colors,
+              these will still have the template color., key: 54d5ab73
+            label: Text
+            name: 54d5ab73
+            widget: text
+          - hint: >-
+              Original text: This happens because these graphics are images
+              (PNG, JPG, SVG, etc), so updating the Webflow CSS (styling) won't
+              affect them. If you would like to reuse this graphics, you can
+              always download them and edit them using any design software (i.e.
+              Photoshop, Illustrator, Sketch, Figma, etc), or directly upload
+              your own images/graphics that match your brand., key: 51fd377a
+            label: Text
+            name: 51fd377a
+            widget: text
+          - hint: 'Original text: Editing Pages, key: 46ea6fc'
+            label: Text
+            name: 46ea6fc
+            widget: string
+          - hint: >-
+              Original text: Now it's time to continue with the next steps to
+              edit your website pages. Usually there are 2 types of content that
+              will be edited, which are the following., key: -789100a8
+            label: Text
+            name: '-789100a8'
+            widget: text
+          - hint: 'Original text: Static Content, key: -2f1c4b39'
+            label: Text
+            name: '-2f1c4b39'
+            widget: string
+          - hint: >-
+              Original text: Static Content is all the content that is not
+              CMS-based, which means that it is not dynamic (like a Blog Post,
+              for example)., key: -37ec67ae
+            label: Text
+            name: '-37ec67ae'
+            widget: text
+          - hint: >-
+              Original text: You can easily identify all this content because
+              it's shown as grey in the left sidebar Navigator, and it shows a
+              blue border when you click or hover over it., key: -25582591
+            label: Text
+            name: '-25582591'
+            widget: text
+          - hint: >-
+              Original text: If you want to edit this type of content, you can
+              just double click it, and you will be able to directly type right
+              there., key: 588c468a
+            label: Text
+            name: 588c468a
+            widget: text
+          - hint: 'Original text: Dynamic Content (CMS), key: 4836cf80'
+            label: Text
+            name: 4836cf80
+            widget: string
+          - hint: >-
+              Original text: Dynamic Content is all the content that is dynamic
+              and will be auto-generated based on the content added in the CMS
+              section in the left sidebar (just below Pages icon)., key:
+              -557d2d0
+            label: Text
+            name: '-557d2d0'
+            widget: text
+          - hint: >-
+              Original text: You can easily identify all of this because it's
+              shown as purple in the left sidebar Navigator, and it shows a
+              purple border when you click or hover it., key: 145ad0dc
+            label: Text
+            name: 145ad0dc
+            widget: text
+          - hint: >-
+              Original text: This content should be updated directly in the CMS
+              section. This is meant to make it very easy for you to update it,
+              as it's very likely it will need to be constantly updated (For
+              example, adding a new blog post)., key: -48759106
+            label: Text
+            name: '-48759106'
+            widget: text
+          - hint: >-
+              Original text: Also, if you want to edit a complete auto-generated
+              CMS page (for example, a Blog Post), you will find this page
+              available for editing in the bottom of all pages in the Pages
+              section in the left sidebar., key: 52afbf60
+            label: Text
+            name: 52afbf60
+            widget: text
+          - hint: 'Original text: Products (eCommerce), key: -3bd024ab'
+            label: Text
+            name: '-3bd024ab'
+            widget: string
+          - hint: >-
+              Original text: Products or eCommerce content function in a similar
+              way to the CMS dynamic content, however, this is focused
+              exclusively for eCommerce products., key: 5522e0a0
+            label: Text
+            name: 5522e0a0
+            widget: text
+          - hint: >-
+              Original text: You can identify eCommerce content in a similar way
+              to the CMS content, because it's also shown as purple in the left
+              sidebar Navigator, as well as with a purple border when you click
+              or hover it., key: 30583d11
+            label: Text
+            name: 30583d11
+            widget: text
+          - hint: >-
+              Original text: This content should be updated directly in the
+              eCommerce tab in the left sidebar. This is meant to make it very
+              easy for you to update it, as it's very likely it will need to be
+              constantly updated (For example, changing a product price, or
+              adding more stock)., key: bfb8ded
+            label: Text
+            name: bfb8ded
+            widget: text
+          - hint: >-
+              Original text: Also, if you want to edit the autogenerated product
+              eCommerce page, you will find this page available for editing
+              almost at the bottom of all pages just above CMS collection
+              pages., key: 46ec2b71
+            label: Text
+            name: 46ec2b71
+            widget: text
+          - hint: 'Original text: Useful Notes, key: -14e4fb49'
+            label: Text
+            name: '-14e4fb49'
+            widget: string
+          - hint: >-
+              Original text: Also than the main basic explanation we shared
+              above, here we share a few tips and how-to's which are from the
+              most common questions we receive., key: -5445a472
+            label: Text
+            name: '-5445a472'
+            widget: text
+          - hint: 'Original text: Interactions, key: 593a48c1'
+            label: Text
+            name: 593a48c1
+            widget: string
+          - hint: >-
+              Original text: If you would like to edit any template Interaction
+              (i.e. removing a appear effect), you can easily identify elements
+              that have interactions as these have a small Interactions icon (a
+              small thunder) in the left sidebar Navigator., key: 754d21ed
+            label: Text
+            name: 754d21ed
+            widget: text
+          - hint: >-
+              Original text: If you click this little Interactions icon, you
+              will open the right sidebar Interactions tab for this element,
+              where you can edit the interaction., key: -55808cb0
+            label: Text
+            name: '-55808cb0'
+            widget: text
+          - hint: 'Original text: Mobile or Tablet View, key: -67a47b80'
+            label: Text
+            name: '-67a47b80'
+            widget: string
+          - hint: >-
+              Original text: Everytime you make a change (for example, you
+              create a new section design), it's a good practice to go to your
+              Viewport top navigation and see how it looks on Tablet and
+              Mobile., key: -24cc381e
+            label: Text
+            name: '-24cc381e'
+            widget: text
+          - hint: >-
+              Original text: If you only edit a Template section with updated
+              text or images and you don't erase any Template class, this should
+              not be needed, however, if you customize the template more deeply,
+              edit classes, or create new sections, it's always good to
+              constantly edit your mobile and tablet views to ensure everything
+              is looking perfect., key: 9286fb3
+            label: Text
+            name: 9286fb3
+            widget: text
+          - hint: >-
+              Original text: Editing Meta Title, Desc and Featured Image, key:
+              3e4ef1a8
+            label: Text
+            name: 3e4ef1a8
+            widget: string
+          - hint: >-
+              Original text: If you would like to customize the Title,
+              Description and Image that is shown when you share your website on
+              any place (i.e. Facebook, Twitter, etc), you can easily go to the
+              Pages section in the left Sidebar, click the little Settings icon
+              of the page you would like to customize, and all these settings
+              will appear. , key: -3544fa21
+            label: Text
+            name: '-3544fa21'
+            widget: text
+          - hint: >-
+              Original text: Please note it's important to change this on page
+              basis., key: -55487c78
+            label: Text
+            name: '-55487c78'
+            widget: string
+          - hint: 'Original text: Backups, key: 4e86dad1'
+            label: Text
+            name: 4e86dad1
+            widget: string
+          - hint: >-
+              Original text: If something goes wrong, for example, if you are
+              not liking where the website is going to, if you deleted some
+              critical classes that were required to make the Template look
+              nice, or if you just want to go to a previous version for any
+              reason, you can always go to the Backups section., key: 728de2bd
+            label: Text
+            name: 728de2bd
+            widget: text
+          - hint: >-
+              Original text: You can find it in the Settings section in the left
+              Sidebar, and then you can just see all the automatic or manual
+              backups. Restoring to the old backup is just a click away., key:
+              -3e291e74
+            label: Text
+            name: '-3e291e74'
+            widget: text
+          - hint: 'Original text: Growth Webflow Template Support, key: -3d5eebc0'
+            label: Text
+            name: '-3d5eebc0'
+            widget: string
+          - hint: >-
+              Original text: As you could see above,Growth was built on Webflow
+              using the best practices to make it very easy for you to edit the
+              template and customize it to your needs. , key: 6f00f48c
+            label: Text
+            name: 6f00f48c
+            widget: text
+          - hint: >-
+              Original text: However, if you ever find any issue, need help, or
+              just want to say hi, feel free to send us at email at , key:
+              -17e0c6d2
+            label: Text
+            name: '-17e0c6d2'
+            widget: text
+          - hint: 'Original text: growth@brixtemplates.com, key: 4a01eff4'
+            label: Text
+            name: 4a01eff4
+            widget: string
+          - hint: 'Original text:  — We will be happy to help you., key: 56c689be'
+            label: Text
+            name: 56c689be
+            widget: string
+          - hint: 'Original text: Custom Design & Development, key: -33b78572'
+            label: Text
+            name: '-33b78572'
+            widget: string
+          - hint: >-
+              Original text: On the other hand, if you are looking for help to
+              build an unique and personalized version of Growth, or just an
+              amazing website designed & developed from scratch on Webflow, feel
+              free to get in touch with our , key: -425da9c3
+            label: Text
+            name: '-425da9c3'
+            widget: text
+          - hint: 'Original text: Webflow Design Agency, key: 63660769'
+            label: Text
+            name: '63660769'
+            widget: string
+          - hint: >-
+              Original text: . The amazing team behind Growth Webflow Template
+              can help you., key: -6dca9518
+            label: Text
+            name: '-6dca9518'
+            widget: string
+          - hint: 'Original text: Frequently Asked Questions, key: -475b7d60'
+            label: Text
+            name: '-475b7d60'
+            widget: string
+          - hint: >-
+              Original text: How can I get more icons for the template?, key:
+              -5b720691
+            label: Text
+            name: '-5b720691'
+            widget: string
+          - hint: >-
+              Original text: Looking for a broader icon family to use in this
+              Webflow Template? Take a look at our , key: -7eb541cd
+            label: Text
+            name: '-7eb541cd'
+            widget: string
+          - hint: 'Original text: BRIX Templates Icon Fonts, key: -5f2c60fb'
+            label: Text
+            name: '-5f2c60fb'
+            widget: string
+          - hint: >-
+              Original text:  and get a collection of 100+ icons for your
+              template., key: -4234a2af
+            label: Text
+            name: '-4234a2af'
+            widget: string
+          - hint: >-
+              Original text: Are you going to release a template for X?, key:
+              -495b6786
+            label: Text
+            name: '-495b6786'
+            widget: string
+          - hint: >-
+              Original text: Have an idea for another Webflow Template you would
+              like to see come to life? Send us your , key: -704942de
+            label: Text
+            name: '-704942de'
+            widget: text
+          - hint: 'Original text: Webflow Template Idea, key: -4fd84261'
+            label: Text
+            name: '-4fd84261'
+            widget: string
+          - hint: >-
+              Original text:  and win a special price if we select it., key:
+              2c62cf78
+            label: Text
+            name: 2c62cf78
+            widget: string
+          - hint: 'Original text: Theme Styles, key: -4dd498a7'
+            label: Text
+            name: '-4dd498a7'
+            widget: string
+          - hint: 'Original text: Icons, key: 43362fa'
+            label: Text
+            name: 43362fa
+            widget: string
+          - hint: 'Original text: Symbols, key: -4b22a45'
+            label: Text
+            name: '-4b22a45'
+            widget: string
+          - hint: 'Original text: Buttons, key: 719b5761'
+            label: Text
+            name: 719b5761
+            widget: string
+          - hint: 'Original text: Get Template, key: -309649bc'
+            label: Text
+            name: '-309649bc'
+            widget: string
+          - hint: 'Original text: Webflow Styleguide, key: 2c03ac89'
+            label: Text
+            name: 2c03ac89
+            widget: string
+          - hint: >-
+              Original text: Browse the UI elements available on the Template.
+              Growth is a Webflow Template for Marketing Agencies. Growth was
+              designed & developed by , key: -2ebb9497
+            label: Text
+            name: '-2ebb9497'
+            widget: text
+          - hint: 'Original text: BRIX Templates, key: 782ab1b8'
+            label: Text
+            name: 782ab1b8
+            widget: string
+          - hint: 'Original text: Buy Template, key: -435422ec'
+            label: Text
+            name: '-435422ec'
+            widget: string
+          - hint: 'Original text: Primary Color, key: -495a787b'
+            label: Text
+            name: '-495a787b'
+            widget: string
+          - hint: 'Original text: Primary 1, key: 9a3b973'
+            label: Text
+            name: 9a3b973
+            widget: string
+          - hint: 'Original text: #F4263E, key: -4a1e58b9'
+            label: Text
+            name: '-4a1e58b9'
+            widget: string
+          - hint: 'Original text: Secondary Colors, key: -69bde624'
+            label: Text
+            name: '-69bde624'
+            widget: string
+          - hint: 'Original text: Secondary 1, key: 73579065'
+            label: Text
+            name: '73579065'
+            widget: string
+          - hint: 'Original text: #782CE4, key: -637e791c'
+            label: Text
+            name: '-637e791c'
+            widget: string
+          - hint: 'Original text: Secondary 2, key: 73579066'
+            label: Text
+            name: '73579066'
+            widget: string
+          - hint: 'Original text: #FFCD1D, key: -4918c309'
+            label: Text
+            name: '-4918c309'
+            widget: string
+          - hint: 'Original text: Secondary 3, key: 73579067'
+            label: Text
+            name: '73579067'
+            widget: string
+          - hint: 'Original text: #FFFAF1, key: -49176eb7'
+            label: Text
+            name: '-49176eb7'
+            widget: string
+          - hint: 'Original text: Secondary 4, key: 73579068'
+            label: Text
+            name: '73579068'
+            widget: string
+          - hint: 'Original text: #FF961B, key: -491d834f'
+            label: Text
+            name: '-491d834f'
+            widget: string
+          - hint: 'Original text: Secondary 5, key: 73579069'
+            label: Text
+            name: '73579069'
+            widget: string
+          - hint: 'Original text: #1B76FF, key: -6d2c8c8d'
+            label: Text
+            name: '-6d2c8c8d'
+            widget: string
+          - hint: 'Original text: Secondary 6, key: 7357906a'
+            label: Text
+            name: 7357906a
+            widget: string
+          - hint: 'Original text: #3FDCFF, key: -698463ab'
+            label: Text
+            name: '-698463ab'
+            widget: string
+          - hint: 'Original text: Neutral Colors, key: -39dcfdd7'
+            label: Text
+            name: '-39dcfdd7'
+            widget: string
+          - hint: 'Original text: Neutral 700, key: -31fb1582'
+            label: Text
+            name: '-31fb1582'
+            widget: string
+          - hint: 'Original text: #1F2559, key: -6cf67a41'
+            label: Text
+            name: '-6cf67a41'
+            widget: string
+          - hint: 'Original text: Neutral 500, key: -31fb1d04'
+            label: Text
+            name: '-31fb1d04'
+            widget: string
+          - hint: 'Original text: #62668A, key: -65863f98'
+            label: Text
+            name: '-65863f98'
+            widget: string
+          - hint: 'Original text: Neutral 300, key: -31fb2486'
+            label: Text
+            name: '-31fb2486'
+            widget: string
+          - hint: 'Original text: #BEBFCC, key: -4ffaa7b6'
+            label: Text
+            name: '-4ffaa7b6'
+            widget: string
+          - hint: 'Original text: Neutral 200, key: -31fb2847'
+            label: Text
+            name: '-31fb2847'
+            widget: string
+          - hint: 'Original text: #E7E8F1, key: -4ba03e0d'
+            label: Text
+            name: '-4ba03e0d'
+            widget: string
+          - hint: 'Original text: Neutral 100, key: -31fb2c08'
+            label: Text
+            name: '-31fb2c08'
+            widget: string
+          - hint: 'Original text: #FAFAFC, key: -495de42a'
+            label: Text
+            name: '-495de42a'
+            widget: string
+          - hint: 'Original text: White, key: 4fadc09'
+            label: Text
+            name: 4fadc09
+            widget: string
+          - hint: 'Original text: #FFFFFF, key: -49175bdd'
+            label: Text
+            name: '-49175bdd'
+            widget: string
+          - hint: 'Original text: Rich Text, key: 41b289f1'
+            label: Text
+            name: 41b289f1
+            widget: string
+          - hint: 'Original text: Heading H1 - Aa Bb Cc Dd, key: -7cf6378c'
+            label: Text
+            name: '-7cf6378c'
+            widget: string
+          - hint: 'Original text: Heading 1 - 48px/1.292em, key: -7643136d'
+            label: Text
+            name: '-7643136d'
+            widget: string
+          - hint: 'Original text: Heading H2 - Aa Bb Cc Dd, key: -231acd4b'
+            label: Text
+            name: '-231acd4b'
+            widget: string
+          - hint: 'Original text: Heading 2 - 38px/1.263em, key: 639bcbb7'
+            label: Text
+            name: 639bcbb7
+            widget: string
+          - hint: 'Original text: Heading H3 - Aa Bb Cc Dd, key: 36c09cf6'
+            label: Text
+            name: 36c09cf6
+            widget: string
+          - hint: 'Original text: Heading 3 - 24px/1.375em, key: -1608336b'
+            label: Text
+            name: '-1608336b'
+            widget: string
+          - hint: 'Original text: Heading H4 - Aa Bb Cc Dd, key: -6f63f8c9'
+            label: Text
+            name: '-6f63f8c9'
+            widget: string
+          - hint: 'Original text: Heading 4 - 20px/1.400em, key: 7801b593'
+            label: Text
+            name: 7801b593
+            widget: string
+          - hint: 'Original text: Heading H5 - Aa Bb Cc Dd, key: -15888e88'
+            label: Text
+            name: '-15888e88'
+            widget: string
+          - hint: 'Original text: Heading 5 - 18px/1.333em, key: -7052b06'
+            label: Text
+            name: '-7052b06'
+            widget: string
+          - hint: 'Original text: Heading H6 - Aa Bb Cc Dd, key: 4452dbb9'
+            label: Text
+            name: 4452dbb9
+            widget: string
+          - hint: 'Original text: Heading 6 - 16px/1.125em, key: -4f594e88'
+            label: Text
+            name: '-4f594e88'
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Suspendisse varius enim in eros elementum tristique. Duis
+              cursus, mi quis viverra ornare, eros dolor interdum nulla, ut
+              commodo diam libero vitae erat. Aenean faucibus nibh et justo
+              cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus
+              tristique posuere., key: -5286fc08
+            label: Text
+            name: '-5286fc08'
+            widget: text
+          - hint: 'Original text: Paragraph Default - 16px/1.688em, key: -717ab83d'
+            label: Text
+            name: '-717ab83d'
+            widget: string
+          - hint: 'Original text: Paragraph Large - 20px/1.7em, key: 19a9ec23'
+            label: Text
+            name: 19a9ec23
+            widget: string
+          - hint: 'Original text: Link - Lorem ipsum dolor sit amet, key: -4e6b1409'
+            label: Text
+            name: '-4e6b1409'
+            widget: string
+          - hint: 'Original text: Links, key: 4605f99'
+            label: Text
+            name: 4605f99
+            widget: string
+          - hint: 'Original text: Bold - Lorem ipsum dolor sit amet, key: -36412eb4'
+            label: Text
+            name: '-36412eb4'
+            widget: string
+          - hint: 'Original text: Bold Text, key: 41f759e8'
+            label: Text
+            name: 41f759e8
+            widget: string
+          - hint: 'Original text: Italic - Lorem ipsum dolor sit amet, key: 351a5d81'
+            label: Text
+            name: 351a5d81
+            widget: string
+          - hint: 'Original text: Italic, key: -7cddd9b0'
+            label: Text
+            name: '-7cddd9b0'
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit. Aliquet euismod ut id ullamcorper nunc diam. Amet a ac ut
+              pharetra. Amet, accumsan, nisl in elementum volutpat integer.
+              Cursus est elementum maecenas ut., key: -5d933771
+            label: Text
+            name: '-5d933771'
+            widget: text
+          - hint: 'Original text: Block Quote, key: 3f3470e9'
+            label: Text
+            name: 3f3470e9
+            widget: string
+          - hint: >-
+              Original text: Aliquet porttitor lacus luctus accumsan tortor
+              posuere ac ut. Lectus quam., key: 2faec47f
+            label: Text
+            name: 2faec47f
+            widget: string
+          - hint: >-
+              Original text: Placerat vestibulum lectus mauris ultrices eros in
+              cursus., key: -3a1abd7f
+            label: Text
+            name: '-3a1abd7f'
+            widget: string
+          - hint: >-
+              Original text: Convallis aenean et tortor at. Convallis tellus id
+              interdum velit laoreet idon., key: -999f08
+            label: Text
+            name: '-999f08'
+            widget: string
+          - hint: 'Original text: Bullet List, key: f1328fc'
+            label: Text
+            name: f1328fc
+            widget: string
+          - hint: 'Original text: Numered List, key: -4b6de654'
+            label: Text
+            name: '-4b6de654'
+            widget: string
+          - hint: >-
+              Original text: Lorem ipsum dolor sit ame porttiust eroso, key:
+              -82c788c
+            label: Text
+            name: '-82c788c'
+            widget: string
+          - hint: 'Original text: Figure & Figure Caption, key: -27f31680'
+            label: Text
+            name: '-27f31680'
+            widget: string
+          - hint: 'Original text: Small, key: 4c4a4e7'
+            label: Text
+            name: 4c4a4e7
+            widget: string
+          - hint: 'Original text: Button Primary - Small, key: 3cce4e28'
+            label: Text
+            name: 3cce4e28
+            widget: string
+          - hint: 'Original text: Default, key: -40b391df'
+            label: Text
+            name: '-40b391df'
+            widget: string
+          - hint: 'Original text: Button Primary - Default, key: 1b90cb22'
+            label: Text
+            name: 1b90cb22
+            widget: string
+          - hint: 'Original text: Large, key: 45ccb1b'
+            label: Text
+            name: 45ccb1b
+            widget: string
+          - hint: 'Original text: Button Primary - Large, key: 3c66745c'
+            label: Text
+            name: 3c66745c
+            widget: string
+          - hint: 'Original text: Button Secondary - Small, key: 99fa31a'
+            label: Text
+            name: 99fa31a
+            widget: string
+          - hint: 'Original text: Button Secondary - Default, key: -69f546c'
+            label: Text
+            name: '-69f546c'
+            widget: string
+          - hint: 'Original text: Button Secondary - Large, key: 937c94e'
+            label: Text
+            name: 937c94e
+            widget: string
+          - hint: 'Original text: Google My Business Optimization, key: 36ee1660'
+            label: Text
+            name: 36ee1660
+            widget: string
+          - hint: 'Original text: Start Now, key: -7905e28'
+            label: Text
+            name: '-7905e28'
+            widget: string
+          - hint: >-
+              Original text: What is Google My Business Optimization?, key:
+              -66368127
+            label: Text
+            name: '-66368127'
+            widget: string
+          - hint: >-
+              Original text: A marketing consultant once said the website is the
+              mother ship of all small businesses. Next to your website the most
+              important piece of public information is the Google My Business
+              page or “GMB”. GMB is the biggest directory listing on the web. It
+              contains your name, phone number, address, hours, services and so
+              much more. Optimizing this listing is how your business stands out
+              to Google., key: -1713eb80
+            label: Text
+            name: '-1713eb80'
+            widget: text
+          - hint: >-
+              Original text: The GMB or Google My Business page is also the map
+              listing that everyone is so familiar with due to the rise of
+              mobile devices. The algorithms that control what business sees the
+              most traffic rewards optimized GMB pages. Google recognizes that
+              this business hasn’t had a review in 6 months or has no pictures
+              posted. A listing that doesn’t regularly post anything or has
+              inconsistent information is not going to get as much organic
+              traffic as a business that is continually working on their GMB.,
+              key: -6c61238d
+            label: Text
+            name: '-6c61238d'
+            widget: text
+          - hint: >-
+              Original text: If you type in “best insurance agent near me”-Who
+              do you think Google is going to prioritize on your very limited
+              space on the Google search results? The agent with 6 reviews and
+              no activity in the last 9 months - or the agency with 35 reviews
+              (and reviews being added weekly), 4 GMB posts in the last month,
+              seasonal photos with their team, updated hours on national
+              holidays and revised services and products in the last 90 days? ,
+              key: -2d57b47f
+            label: Text
+            name: '-2d57b47f'
+            widget: text
+          - hint: >-
+              Original text: The company that is utilizing their GMB will be
+              rewarded with more organic traffic over the company that doesn’t
+              bother with their GMB listing. Google might even think the
+              inactive GMB is not a very popular or relevant choice for that
+              Google user or maybe even guess they’re going out of business or
+              closed down. , key: 9c09c5
+            label: Text
+            name: 9c09c5
+            widget: text
+          - hint: >-
+              Original text: Want to get “into the maps” and beat out your
+              competition? Then it’s time to put consistent effort into your GMB
+              and remind Google that your business is a relevant and popular
+              choice for the members of your community. At the end of the day
+              that’s all Google is trying to do-help people access useful
+              information. , key: -554fe5ba
+            label: Text
+            name: '-554fe5ba'
+            widget: text
+          - hint: >-
+              Original text: We’ll manage your GMB page and keep your inbound
+              flowing in. Most importantly we’re taking this off your to do list
+              and letting an experienced SEO team handle this critical yet
+              tedious job., key: -6d29fc1f
+            label: Text
+            name: '-6d29fc1f'
+            widget: text
+      - label: Links
+        name: links
+        file: cms/_data/links.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Links
+          - hint: 'Original link: /, key: 2f'
+            label: Link
+            name: 2f
+            widget: string
+          - hint: 'Original link: /services, key: -753a8e73'
+            label: Link
+            name: '-753a8e73'
+            widget: string
+          - hint: 'Original link: /google-placement, key: -3a279d80'
+            label: Link
+            name: '-3a279d80'
+            widget: string
+          - hint: 'Original link: /contact, key: 4b0e6111'
+            label: Link
+            name: 4b0e6111
+            widget: string
+          - hint: 'Original link: #, key: 23'
+            label: Link
+            name: '23'
+            widget: string
+          - hint: 'Original link: /#/checkout, key: 5032f721'
+            label: Link
+            name: 5032f721
+            widget: string
+          - hint: 'Original link: https://cal.optimalpros.com/o/google, key: 2b59f15c'
+            label: Link
+            name: 2b59f15c
+            widget: string
+          - hint: 'Original link: tel:+13143901184, key: -2523a8cb'
+            label: Link
+            name: '-2523a8cb'
+            widget: string
+          - hint: 'Original link: mailto:sales@optimalpros.com, key: 4654783f'
+            label: Link
+            name: 4654783f
+            widget: string
+          - hint: 'Original link: mailto:support@optimalpros.com, key: -41c194fe'
+            label: Link
+            name: '-41c194fe'
+            widget: string
+          - hint: 'Original link: http://facebook.com/, key: 1750dc24'
+            label: Link
+            name: 1750dc24
+            widget: string
+          - hint: 'Original link: https://twitter.com/, key: 636eb9b8'
+            label: Link
+            name: 636eb9b8
+            widget: string
+          - hint: 'Original link: https://www.instagram.com/, key: b979dd0'
+            label: Link
+            name: b979dd0
+            widget: string
+          - hint: 'Original link: https://facebook.com/, key: -f3f4979'
+            label: Link
+            name: '-f3f4979'
+            widget: string
+          - hint: 'Original link: /blog, key: 2c48051'
+            label: Link
+            name: 2c48051
+            widget: string
+          - hint: 'Original link: tel:13143901184, key: -3b71859e'
+            label: Link
+            name: '-3b71859e'
+            widget: string
+          - hint: 'Original link: #Open-Positions, key: 273a338a'
+            label: Link
+            name: 273a338a
+            widget: string
+          - hint: 'Original link: #read-more, key: 20e90869'
+            label: Link
+            name: '20e90869'
+            widget: string
+          - hint: 'Original link: /checkout, key: -6bd4518b'
+            label: Link
+            name: '-6bd4518b'
+            widget: string
+          - hint: 'Original link: #Quote, key: 4065ec19'
+            label: Link
+            name: 4065ec19
+            widget: string
+          - hint: 'Original link: https://brixtemplates.com/, key: 7f16b0b1'
+            label: Link
+            name: 7f16b0b1
+            widget: string
+          - hint: 'Original link: https://unsplash.com/, key: 6bccb4d'
+            label: Link
+            name: 6bccb4d
+            widget: string
+          - hint: 'Original link: https://www.pexels.com/, key: 675d206d'
+            label: Link
+            name: 675d206d
+            widget: string
+          - hint: 'Original link: https://www.freepik.com/, key: -66d21c24'
+            label: Link
+            name: '-66d21c24'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/LQZQM_z1b-s, key:
+              1f3ed782
+            label: Link
+            name: 1f3ed782
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/FV3GConVSss, key:
+              -34300c06
+            label: Link
+            name: '-34300c06'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/xVRdDDe6M1A, key:
+              -7bc14185
+            label: Link
+            name: '-7bc14185'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/9e9PD9blAto, key:
+              -7ad924c7
+            label: Link
+            name: '-7ad924c7'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/wawEfYdpkag, key:
+              7297e479
+            label: Link
+            name: '7297e479'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/rRiAzFkJPMo, key:
+              -7f8e7bb2
+            label: Link
+            name: '-7f8e7bb2'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/vHVfpi3h5xk, key:
+              73508f37
+            label: Link
+            name: 73508f37
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/oWiEeTIxYvk, key:
+              -1a11bdd5
+            label: Link
+            name: '-1a11bdd5'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/kvF6Q_i8EDI, key:
+              -41de6f6f
+            label: Link
+            name: '-41de6f6f'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/8Klz66m11hU, key:
+              -33d5af48
+            label: Link
+            name: '-33d5af48'
+            widget: string
+          - hint: >-
+              Original link: https://unsplash.com/photos/nZJBt4gQlKI, key:
+              -198f6765
+            label: Link
+            name: '-198f6765'
+            widget: string
+          - hint: >-
+              Original link:
+              https://www.pexels.com/photo/man-in-white-polo-shirt-smiling-3785110/,
+              key: 52c6cb9b
+            label: Link
+            name: 52c6cb9b
+            widget: string
+          - hint: >-
+              Original link:
+              https://www.pexels.com/photo/portrait-photo-of-woman-in-red-sweater-in-front-of-white-background-3771123/,
+              key: -6d941026
+            label: Link
+            name: '-6d941026'
+            widget: string
+          - hint: >-
+              Original link:
+              https://www.pexels.com/photo/man-in-red-button-up-shirt-smiling-3777946/,
+              key: 2ccafeb5
+            label: Link
+            name: 2ccafeb5
+            widget: string
+          - hint: >-
+              Original link:
+              https://www.freepik.com/free-photo/handsome-young-man-white-background_5000061.htm#page=1&query=man%20portrait&position=11,
+              key: -f91b5b3
+            label: Link
+            name: '-f91b5b3'
+            widget: string
+          - hint: >-
+              Original link:
+              https://www.freepik.com/free-photo/portrait-handsome-young-man-with-crossed-arms_9118757.htm#page=1&query=man&position=46,
+              key: -2da227e3
+            label: Link
+            name: '-2da227e3'
+            widget: string
+          - hint: >-
+              Original link:
+              https://www.freepik.com/free-photo/young-tender-fair-haired-teenage-girl-with-healthy-skin-wearing-blue-top-looking-with-serious-pensive-expression-caucasian-woman-model-with-hands-pockets-posing-indoors_8920786.htm#page=2&query=women++blonde+woman&position=42,
+              key: 3e93c94
+            label: Link
+            name: 3e93c94
+            widget: string
+          - hint: 'Original link: https://university.webflow.com/, key: 76a31a6b'
+            label: Link
+            name: 76a31a6b
+            widget: string
+          - hint: 'Original link: mailto:growth@brixtemplates.com, key: -4a97dc04'
+            label: Link
+            name: '-4a97dc04'
+            widget: string
+          - hint: >-
+              Original link: https://brixtemplates.com/webflow-design-agency,
+              key: 2e232d8
+            label: Link
+            name: 2e232d8
+            widget: string
+          - hint: >-
+              Original link: https://brixtemplates.com/icon-fonts, key:
+              -16a3e8df
+            label: Link
+            name: '-16a3e8df'
+            widget: string
+          - hint: >-
+              Original link: https://brixtemplates.com/template-idea, key:
+              -33e0f8a7
+            label: Link
+            name: '-33e0f8a7'
+            widget: string
+          - hint: 'Original link: #Colors, key: -4be23c8d'
+            label: Link
+            name: '-4be23c8d'
+            widget: string
+          - hint: 'Original link: #Typography, key: -4fbb3e4e'
+            label: Link
+            name: '-4fbb3e4e'
+            widget: string
+          - hint: 'Original link: #Icons, key: 3fed00b7'
+            label: Link
+            name: 3fed00b7
+            widget: string
+          - hint: 'Original link: #Buttons, key: -5a9b8622'
+            label: Link
+            name: '-5a9b8622'
+            widget: string
+          - hint: >-
+              Original link:
+              https://webflow.com/templates/html/growth-marketing-website-template,
+              key: -19201acc
+            label: Link
+            name: '-19201acc'
+            widget: string
+      - label: Images
+        name: images
+        file: cms/_data/images.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: Images
+          - label: Image
+            name: 2425eb37
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 22d9bc5
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-1ba6e6c0'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-f0de504'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-274ef83'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 46cfb7c9
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: c30687d
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3ee33b7f
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 18c95dfe
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 4b7c3100
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 2562537f
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '58152681'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-3b4a6a2'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-465105ea'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 4b67db8c
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 524c9c99
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 5ee5921a
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6b7e879b
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-ced8821'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 5e40c703
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6ad9bc84
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 7772b205
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 206b6b40
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-808325b'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '422966e6'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-73a4ffd9'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-75462e4e'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-68ad38cd'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-5c14434c'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 666f146a
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 11522d31
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 1deb22b2
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-2cdc0e36'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 31fb4900
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3e943e81
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-688d04'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 78177d1c
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 250f3594
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 31a82b15
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-6fdd96bc'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 755e72f0
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-18bf1b5b'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-bebd2be'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6bf5dbef
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3e74ddbd
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 788ed170
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: d461844
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-7ad8390f'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-1f16f98'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 4b6147bb
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 57fa3d3c
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 649332bd
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-1ff25454'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-7942ab3'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 10c9feee
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 2928288f
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-5b29756a'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-6e8c8d81'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-741c80ff'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 64ae1c02
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 324a45fe
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '71471183'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-9f457d5'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 253bbe4c
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-41a8e472'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 2c39bc46
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-20e31218'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3f859173
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 518ef651
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '409e7370'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-5091914c'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 542f2a08
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-7c8c4e30'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 5a5f77af
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 41d412b4
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-40e8d1c7'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-15b34a87'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6db3044a
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: bed4ac8
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 1839f734
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '5239050'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3e83a044
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 4db4ab9f
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 3482c09d
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 5a4da120
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 411bb61e
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 66e696a1
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 737f8c22
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 61b8b139
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: '-787c6e44'
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 7aea9c3b
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 6e51a6ba
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+          - label: Image
+            name: 12f4f38d
+            widget: object
+            fields:
+              - name: url
+                label: Image Url
+                widget: image
+                allow_multiple: false
+                required: false
+              - name: alt
+                label: Image Alt
+                widget: string
+                required: false
+      - label: eCommerce
+        name: ecommerce
+        file: cms/_data/settings/ecommerce.json
+        fields:
+          - label: Title
+            name: title
+            widget: hidden
+            default: eCommerce
+          - label: Currencies and Formats
+            name: currencies_and_formats
+            widget: object
+            fields:
+              - hint: >-
+                  Template used to format the price, you can use following
+                  placeholders: {amount}, {currencyCode}, {symbol}
+                name: template
+                label: Price Template
+                widget: string
+                required: true
+              - hint: Character to divide decimals
+                name: decimal
+                label: Decimal
+                widget: string
+                required: true
+              - hint: Character to group amount
+                name: group
+                label: Group
+                widget: string
+                required: true
+              - hint: Number of fraction digits
+                name: fractionDigits
+                label: Fraction Digits
+                widget: number
+                required: true
+                value_type: int
+              - hint: Hide decimals for whole prices
+                name: hideDecimalForWholeNumbers
+                label: Hide decimals
+                widget: boolean
+                required: false
+              - hint: ''
+                name: currencies
+                label: Currencies
+                widget: list
+                required: true
+                min: 1
+                fields:
+                  - hint: Currency Code (3 char) all lowercase
+                    name: currencyCode
+                    label: Currency Code
+                    widget: string
+                    required: true
+                  - hint: ''
+                    name: symbol
+                    label: Symbol
+                    widget: string
+                    required: true
+          - label: Snipcart
+            name: snipcart
+            widget: object
+            fields:
+              - hint: Public Api Key
+                name: apiKey
+                label: Api Key
+                widget: string
+                required: true
+          - label: Snipcart Style
+            name: css
+            widget: object
+            fields:
+              - hint: 'Original color: #52bcf8'
+                name: primary-color
+                label: Primary color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #5082e4'
+                name: secondary-color
+                label: Secondary color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #f0f5f6'
+                name: tertiary-color
+                label: Tertiary color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #e8f0fe'
+                name: autofill-color
+                label: Autofill color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original Font Family: Open Sans,sans-serif'
+                name: main-font
+                label: Main font
+                widget: string
+                required: true
+              - hint: 'Original color: #313332'
+                name: text-color
+                label: Text color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #d93120'
+                name: red-color
+                label: Red color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original Font Family: Montserrat,sans-serif'
+                name: heading-font
+                label: Heading font
+                widget: string
+                required: true
+              - hint: 'Original color: #6ae35c'
+                name: green-color
+                label: Green color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fff'
+                name: white-color
+                label: White color
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #fdfefe'
+                name: input-bgcolor
+                label: Input bgcolor
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+              - hint: 'Original color: #f7fafa'
+                name: box-bgcolor
+                label: Box bgcolor
+                widget: color
+                required: true
+                enableAlpha: true
+                allowInput: true
+publish_mode: editorial_workflow
